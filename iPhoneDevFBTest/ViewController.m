@@ -38,7 +38,7 @@
 }
 
 - (void)userDidNotGrantPermission {
-    [self showMessage:@"Extended permissions not granted."];
+    NSLog(@"Extended permissions not granted.");
 }
 
 #pragma mark - View lifecycle

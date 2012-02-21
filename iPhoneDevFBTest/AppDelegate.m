@@ -36,7 +36,7 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
-	facebook = [[Facebook alloc] initWithAppId:@"295310543858807" andDelegate:self];
+	facebook = [[Facebook alloc] initWithAppId:@"xxxxxxxxxxxx" andDelegate:self];
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	if ([defaults objectForKey:@"FBAccessTokenKey"] && [defaults objectForKey:@"FBExpirationDateKey"]) {
 		facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
