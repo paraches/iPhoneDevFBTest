@@ -7,13 +7,13 @@
 //
 
 #import "AppDelegate.h"
-
 #import "ViewController.h"
 
 @implementation AppDelegate
 
 @synthesize window = _window;
 @synthesize viewController = _viewController;
+@synthesize facebook;
 
 - (void)dealloc
 {
@@ -22,14 +22,40 @@
     [super dealloc];
 }
 
+- (void)fbDidLogin {
+	NSLog(@"facebook did Login!!!");
+
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:[facebook accessToken] forKey:@"FBAccessTokenKey"];
+    [defaults setObject:[facebook expirationDate] forKey:@"FBExpirationDateKey"];
+    [defaults synchronize];
+
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
+	facebook = [[Facebook alloc] initWithAppId:@"295310543858807" andDelegate:self];
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if ([defaults objectForKey:@"FBAccessTokenKey"] && [defaults objectForKey:@"FBExpirationDateKey"]) {
+		facebook.accessToken = [defaults objectForKey:@"FBAccessTokenKey"];
+		facebook.expirationDate = [defaults objectForKey:@"FBExpirationDateKey"];
+	}
+	if (![facebook isSessionValid]) {
+		[facebook authorize:nil];
+	}
+
 	self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController" bundle:nil] autorelease];
 	self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+
+    return [facebook handleOpenURL:url]; 
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

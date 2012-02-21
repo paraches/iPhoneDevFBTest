@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "AppDelegate.h"
 
 @implementation ViewController
 
@@ -16,12 +17,39 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)dialogCompleteWithUrl:(NSURL *)url {
+	NSLog(@"dialogCompleteWithUrl");
+}
+
+- (void)dialogDidComplete:(FBDialog *)dialog {
+	NSLog(@"publish successfully");
+}
+
+- (void)dialogDidNotComplete:(FBDialog *)dialog {
+    NSLog(@"Dialog dismissed.");
+}
+
+- (void)dialog:(FBDialog*)dialog didFailWithError:(NSError *)error {
+    NSLog(@"Error message: %@", [[error userInfo] objectForKey:@"error_msg"]);
+}
+
+- (void)userDidGrantPermission {
+	NSLog(@"userDidGrantPermission");
+}
+
+- (void)userDidNotGrantPermission {
+    [self showMessage:@"Extended permissions not granted."];
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+	[appDelegate.facebook dialog:@"feed" andDelegate:self];
 }
 
 - (void)viewDidUnload
